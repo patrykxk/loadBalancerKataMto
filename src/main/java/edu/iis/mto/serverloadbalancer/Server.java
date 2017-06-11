@@ -4,7 +4,7 @@ package edu.iis.mto.serverloadbalancer;
 public class Server {
 
 	public double currentLoadPecentage;
-    public int capacity;
+    private int capacity;
 
     public Server(int capacity) {
 	    this.capacity = capacity;
@@ -14,4 +14,7 @@ public class Server {
 		return true;
 	}
 
+    public void addVms(Vm[] vms) {
+        currentLoadPecentage = (double)vms[0].size / (double) this.capacity * 100.0d;
+    }
 }
