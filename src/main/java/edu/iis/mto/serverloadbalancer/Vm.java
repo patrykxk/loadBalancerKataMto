@@ -1,0 +1,7 @@
+package edu.iis.mto.serverloadbalancer;
+
+/**
+ * Created by Patryk on 2017-06-11.
+ */
+public class Vm {
+}
