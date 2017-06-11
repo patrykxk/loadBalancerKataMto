@@ -26,4 +26,7 @@ public class ServerVmsCountMatcher extends TypeSafeMatcher<Server> {
     public void describeTo(Description description) {
         description.appendText("Server vms count: ").appendValue(expectedVmsCount);
     }
+    public static Matcher<? super Server> hasAVMsCountOf(int expectedVmsCount) {
+        return new ServerVmsCountMatcher(expectedVmsCount);
+    }
 }
