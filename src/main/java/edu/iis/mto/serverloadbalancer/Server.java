@@ -24,4 +24,8 @@ public class Server {
         currentLoadPercentage = ((double) vm.size / (double) this.capacity) * MAX_LOAD;
         vms.add(vm);
     }
+
+    public int countVms() {
+        return vms.size();
+    }
 }

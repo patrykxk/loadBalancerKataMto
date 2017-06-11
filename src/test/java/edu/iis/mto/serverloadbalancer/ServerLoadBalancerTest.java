@@ -1,6 +1,7 @@
 package edu.iis.mto.serverloadbalancer;
 
 
+import org.hamcrest.Matcher;
 import org.junit.Test;
 
 import static edu.iis.mto.serverloadbalancer.LoadPercentageMatcher.hasLoadPercentageOf;
@@ -39,7 +40,22 @@ public class ServerLoadBalancerTest {
         balance(aServerListWith(theServer), aVmsListWith(theVm));
 
         assertThat(theServer, hasLoadPercentageOf(10.0d));
-    assertThat("Server contains vm", theServer.contains(theVm));
+        assertThat("Server contains vm", theServer.contains(theVm));
+    }
+    @Test
+    public void balancingServerTwoVms_serverFillsWithAllVms() throws Exception {
+        Server theServer = a(server().withCapacity(10));
+        Vm theFirstVm = a(vm().withSize(1));
+        Vm theSecondVm = a(vm().withSize(1));
+        balance(aServerListWith(theServer), aVmsListWith(theFirstVm, theSecondVm));
+
+        assertThat(theServer, hasCountOfVms(2));
+        assertThat("Server contains first vm", theServer.contains(theFirstVm));
+        assertThat("Server contains second vm", theServer.contains(theSecondVm));
+    }
+
+    private Matcher<? super Server> hasCountOfVms(int expectedCountOfVms) {
+        return new CountOfVmsMatcher(expectedCountOfVms);
     }
 
     private Vm[] aVmsListWith(Vm... vms) {
