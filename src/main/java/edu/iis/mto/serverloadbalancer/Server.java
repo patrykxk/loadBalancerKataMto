@@ -8,8 +8,8 @@ import java.util.List;
  */
 public class Server {
     public static final double MAX_LOAD = 100.0d;
-    public double currentLoadPercentage;
-    public int capacity;
+    double currentLoadPercentage;
+    private int capacity;
     private List<Vm> vms = new ArrayList<Vm>();
 
     public boolean contains(Vm theVm) {
