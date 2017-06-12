@@ -75,6 +75,23 @@ public class ServerLoadBalancerTest {
 
 		assertThat("More server should not contain second vm", !theServer.contains(theVm));
 	}
+	@Test
+	public void balancingServerWithVms() {
+		Server server1 = a(server().withCapacity(5));
+		Server server2 = a(server().withCapacity(10));
+		Vm vm1 = a(vm().ofSize(1));
+		Vm vm2 = a(vm().ofSize(8));
+		Vm vm3 = a(vm().ofSize(3));
+
+		balance(aListOfServersWith(server1, server2), aListOfVmsWith(vm1, vm2, vm3));
+
+		assertThat("Server1 should contain vm1", server1.contains(vm1));
+		assertThat("Server2 should contain vm2", server2.contains(vm2));
+		assertThat("Server1 should contain vm3", server1.contains(vm3));
+
+		assertThat(server1, hasLoadPercentageOf(80.0d));
+		assertThat(server2, hasLoadPercentageOf(80.0d));
+	}
 
     private void balance(Server[] servers, Vm[] vms) {
 		new ServerLoadBalancer().balance(servers, vms);
