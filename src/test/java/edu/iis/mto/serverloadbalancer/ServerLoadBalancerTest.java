@@ -64,13 +64,23 @@ public class ServerLoadBalancerTest {
         Server moreLoadedServer = a(server().withCapacity(100).withCurrentLoadOf(50.0d));
         Server lessLoadedServer = a(server().withCapacity(100).withCurrentLoadOf(45.0d));
 
-        Vm theVm = a(vm().ofSize(10));
+        Vm theVm = a(vm().ofSize(1));
         balance(aListOfServersWith(moreLoadedServer, lessLoadedServer), aListOfVmsWith(theVm));
 
         assertThat("Less loaded server should contain first vm", lessLoadedServer.contains(theVm));
         assertThat("More loaded server should not contain second vm", !moreLoadedServer.contains(theVm));
-
     }
+
+	@Test
+	public void overloadedServerShouldNotBeFilledWithVm() throws Exception {
+		Server theServer = a(server().withCapacity(100).withCurrentLoadOf(95.0d));
+
+		Vm theVm = a(vm().ofSize(10));
+		balance(aListOfServersWith(theServer), aListOfVmsWith(theVm));
+
+		assertThat("Overloaded server should not contain second vm", !theServer.contains(theVm));
+	}
+
     private void balance(Server[] servers, Vm[] vms) {
         new ServerLoadBalancer().balance(servers, vms);
     }
