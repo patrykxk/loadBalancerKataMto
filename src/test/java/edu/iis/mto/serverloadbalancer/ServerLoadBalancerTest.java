@@ -1,6 +1,7 @@
 package edu.iis.mto.serverloadbalancer;
 
 
+import ServerLoadBalancer.ServerLoadBalancer;
 import org.junit.Test;
 
 import static edu.iis.mto.serverloadbalancer.CurrentLoadMatcher.hasCurrentLoadOf;
@@ -23,8 +24,30 @@ public class ServerLoadBalancerTest {
         assertThat(theServer, hasCurrentLoadOf(0.0d));
     }
 
+    @Test
+    public void serverWithOneSlotAndOneVm_shouldBeFilled() throws Exception {
+        Server theServer = a(server().withCapacity(1));
+        Vm theVm = a(vm().ofSize(1));
+        balance(aServersListWith(theServer), aVmListWith(theVm));
+
+        assertThat(theServer, hasCurrentLoadOf(100.0d));
+        assertThat("Server contains vm", theServer.contains(theVm));
+    }
+
+    private Vm[] aVmListWith(Vm... vms) {
+        return vms;
+    }
+
+    private Vm a(VmBuilder vmBuilder) {
+        return vmBuilder.build();
+    }
+
+    private VmBuilder vm() {
+        return new VmBuilder();
+    }
+
     private void balance(Server[] servers, Vm[] vms) {
-        new ServerLoadBalancer.balance(servers, vms);
+        new ServerLoadBalancer().balance(servers, vms);
     }
 
     private Vm[] anEmptyListOfVms() {
