@@ -2,6 +2,7 @@ package edu.iis.mto.serverloadbalancer;
 
 
 import ServerLoadBalancer.ServerLoadBalancer;
+import org.hamcrest.Matcher;
 import org.junit.Test;
 
 import static edu.iis.mto.serverloadbalancer.CurrentLoadMatcher.hasCurrentLoadOf;
@@ -42,6 +43,23 @@ public class ServerLoadBalancerTest {
 
         assertThat(theServer, hasCurrentLoadOf(10.0d));
         assertThat("Server contains vm", theServer.contains(theVm));
+    }
+
+    @Test
+    public void balaningServerWithEnoughRoom_getsFilledWithAllVms() throws Exception {
+        Server theServer = a(server().withCapacity(10));
+        Vm theFirstVm = a(vm().ofSize(1));
+        Vm theSecondVm = a(vm().ofSize(1));
+
+        balance(aServersListWith(theServer), aVmListWith(theFirstVm, theSecondVm));
+
+        assertThat("Server contains first vm", theServer.contains(theFirstVm));
+        assertThat("Server contains second vm", theServer.contains(theSecondVm));
+        assertThat(theServer, hasVmsCoutOf(2));
+    }
+
+    private Matcher<? super Server> hasVmsCoutOf(int expectedVmCount) {
+        return new VmsCountMatcher(expectedVmCount);
     }
 
     private Vm[] aVmListWith(Vm... vms) {
