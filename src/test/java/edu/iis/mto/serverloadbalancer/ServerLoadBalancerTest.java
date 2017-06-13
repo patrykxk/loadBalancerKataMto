@@ -2,7 +2,6 @@ package edu.iis.mto.serverloadbalancer;
 
 
 import ServerLoadBalancer.ServerLoadBalancer;
-import org.hamcrest.Matcher;
 import org.junit.Test;
 
 import static edu.iis.mto.serverloadbalancer.CurrentLoadMatcher.hasCurrentLoadOf;
@@ -58,7 +57,18 @@ public class ServerLoadBalancerTest {
         assertThat("Server contains second vm", theServer.contains(theSecondVm));
         assertThat(theServer, hasVmsCoutOf(2));
     }
+    @Test
+    public void lessLoadedServerShouldBeFilledWithVm() throws Exception {
+        Server moreLoadedServer = a(server().withCapacity(1).withCurrentLoadOf(50.0d));
+        Server lessLoadedServer = a(server().withCapacity(1).withCurrentLoadOf(40.0d));
 
+        Vm theVm = a(vm().ofSize(10));
+
+        balance(aServersListWith(lessLoadedServer), aVmListWith(theVm));
+
+        assertThat("Less loaded server should contains vm", lessLoadedServer.contains(theVm));
+        assertThat("More loaded server should not contains vm", !moreLoadedServer.contains(theVm));
+    }
 
     private Vm[] aVmListWith(Vm... vms) {
         return vms;
