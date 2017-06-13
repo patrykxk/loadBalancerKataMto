@@ -8,6 +8,7 @@ import org.junit.Test;
 import static edu.iis.mto.serverloadbalancer.CurrentLoadMatcher.hasCurrentLoadOf;
 import static edu.iis.mto.serverloadbalancer.ServerBuilder.server;
 import static edu.iis.mto.serverloadbalancer.VmBuilder.vm;
+import static edu.iis.mto.serverloadbalancer.VmsCountMatcher.hasVmsCoutOf;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
 
@@ -58,9 +59,6 @@ public class ServerLoadBalancerTest {
         assertThat(theServer, hasVmsCoutOf(2));
     }
 
-    private Matcher<? super Server> hasVmsCoutOf(int expectedVmCount) {
-        return new VmsCountMatcher(expectedVmCount);
-    }
 
     private Vm[] aVmListWith(Vm... vms) {
         return vms;
