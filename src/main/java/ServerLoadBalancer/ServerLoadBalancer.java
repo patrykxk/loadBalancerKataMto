@@ -8,9 +8,11 @@ import edu.iis.mto.serverloadbalancer.Vm;
  */
 public class ServerLoadBalancer {
 
+    public static final double MAXIMUM_LOAD = 100.0d;
+
     public void balance(Server[] servers, Vm[] vms) {
         if(vms.length>0){
-            servers[0].currentLoadPercentage = 100.0d;
+            servers[0].currentLoadPercentage = MAXIMUM_LOAD;
         }
     }
 
