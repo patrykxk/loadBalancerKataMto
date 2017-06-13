@@ -12,7 +12,7 @@ public class VmBuilder implements Builder<Vm> {
     }
 
     public Vm build() {
-        return new Vm();
+        return new Vm(size);
     }
     public static Server a(ServerBuilder serverBuilder) {
         return serverBuilder.build();
